@@ -77,6 +77,33 @@ app.get("/getAccounts", (req, res) => {
         });
 });
 
+// Add authenticate route to check username and password
+app.post("/authenticate", (req, res) => {
+    const { username, password } = req.body;
+
+    // SQL query to check if the user exists with the provided username and password
+    const query = `
+        SELECT * FROM users WHERE username = $1 AND password = $2
+    `;
+    const values = [username, password];
+
+    // Execute the query
+    client.query(query, values)
+        .then((result) => {
+            if (result.rows.length > 0) {
+                // If the user is found, return the user data
+                res.json(result.rows[0]);
+            } else {
+                // If no user is found, send an error
+                res.status(401).send("❌ Invalid username or password.");
+            }
+        })
+        .catch((err) => {
+            console.error("Error authenticating user", err);
+            res.status(500).send("❌ Error authenticating user.");
+        });
+});
+
 // Start the Express server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
