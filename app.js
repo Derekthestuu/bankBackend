@@ -104,6 +104,36 @@ app.post("/authenticate", (req, res) => {
         });
 });
 
+// Update a specific user's value
+app.put("/changeBankValue", (req, res) => {
+    const { username, field, value } = req.body;
+
+    // Validate that the field is allowed to be updated
+    const allowedFields = ["password", "firstName", "lastName", "money"];
+    if (!allowedFields.includes(field)) {
+        return res.status(400).send("❌ Invalid field for update.");
+    }
+
+    // Convert value to appropriate type for SQL (money should be a float)
+    const query = `UPDATE users SET ${field} = $1 WHERE username = $2`;
+    const values = [value, username];
+
+    // Execute the query
+    client.query(query, values)
+        .then((result) => {
+            if (result.rowCount > 0) {
+                res.json({ success: true, message: "✅ User updated successfully!" });
+            } else {
+                res.status(404).json({ success: false, message: "❌ User not found." });
+            }
+        })
+        .catch((err) => {
+            console.error("Error updating user", err);
+            res.status(500).json({ success: false, message: "❌ Error updating user." });
+        });
+});
+
+
 // Start the Express server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
