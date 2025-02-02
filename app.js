@@ -32,7 +32,7 @@ client.query(`
         password VARCHAR(100) NOT NULL,
         firstName VARCHAR(100),
         lastName VARCHAR(100),
-        money INTEGER DEFAULT 0
+        money DOUBLE DEFAULT 0
     );
 `)
     .then(() => {
