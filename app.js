@@ -30,9 +30,12 @@ client.query(`
         id SERIAL PRIMARY KEY,
         username VARCHAR(100) NOT NULL,
         password VARCHAR(100) NOT NULL,
+        publicUsername VARCHAR(100) NOT NULL,
+        phoneNumber VARCHAR(15) NOT NULL,  -- Changed from INT to VARCHAR(15)
+        email VARCHAR(100) NOT NULL,
         firstName VARCHAR(100),
         lastName VARCHAR(100),
-        money DOUBLE PRECISION NOT NULL DEFAULT 0.0
+        money NUMERIC(10, 2) NOT NULL DEFAULT 0.00
     );
 `)
     .then(() => {
@@ -78,7 +81,7 @@ app.get("/getAccounts", (req, res) => {
 });
 
 app.get("/getUsers", (req, res) => {
-    client.query("SELECT firstname, lastname FROM users")
+    client.query("SELECT firstname, lastname, publicUsername FROM users")
         .then((result) => {
             // Map the results to a single string per user
             const users = result.rows.map(row => `${row.firstname} ${row.lastname}`);
