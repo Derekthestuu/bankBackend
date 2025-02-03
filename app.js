@@ -106,6 +106,8 @@ app.post("/authenticate", (req, res) => {
 
 // Update a specific user's value
 app.put("/changeBankValue", (req, res) => {
+
+    console.log("Changing bank value");
     const { username, field, value } = req.body;
 
     // Validate that the field is allowed to be updated
