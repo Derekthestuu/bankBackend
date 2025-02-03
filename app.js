@@ -77,6 +77,19 @@ app.get("/getAccounts", (req, res) => {
         });
 });
 
+app.get("/getUsers", (req, res) => {
+    client.query("SELECT firstname, lastname FROM users")
+        .then((result) => {
+            // Map the results to a single string per user
+            const users = result.rows.map(row => `${row.firstname} ${row.lastname}`);
+            res.json(users);
+        })
+        .catch((err) => {
+            console.error("Error fetching accounts", err);
+            res.status(500).send("❌ Error getting fellow bankers.");
+        });
+});
+
 // Add authenticate route to check username and password
 app.post("/authenticate", (req, res) => {
     const { username, password } = req.body;
