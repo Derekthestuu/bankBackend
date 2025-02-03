@@ -51,7 +51,7 @@ app.post("/saveAccount", (req, res) => {
 
     // SQL query to insert data into the 'users' table
     const query = `
-        INSERT INTO users (username, password, firstName, lastName, money) 
+        INSERT INTO users (username, password, publicUsername, phoneNumber, email firstName, lastName, money) 
         VALUES ($1, $2, $3, $4, $5)
     `;
     const values = [username, password, firstName, lastName, money];
