@@ -47,14 +47,14 @@ client.query(`
 
 // Save account data to the PostgreSQL database
 app.post("/saveAccount", (req, res) => {
-    const { username, password, firstName, lastName, money } = req.body;
+    const { username, password, publicUsername, phoneNumber, email, firstName, lastName, money } = req.body;
 
     // SQL query to insert data into the 'users' table
     const query = `
-        INSERT INTO users (username, password, publicUsername, phoneNumber, email firstName, lastName, money) 
+        INSERT INTO users (username, password, publicUsername, phoneNumber, email, firstName, lastName, money) 
         VALUES ($1, $2, $3, $4, $5)
     `;
-    const values = [username, password, publicUsername, phoneNumber, email firstName, lastName, money];
+    const values = [username, password, publicUsername, phoneNumber, email, firstName, lastName, money];
 
     // Execute the query
     client.query(query, values)
