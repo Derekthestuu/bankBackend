@@ -4,7 +4,7 @@ const { Client } = require("pg");  // PostgreSQL client for Node.js
 const app = express();
 
 // Middleware to parse incoming JSON requests
-app.use(express.json()); 
+app.use(express.json());
 
 // Create the PostgreSQL client using environment variables
 const client = new Client({
