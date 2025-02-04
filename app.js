@@ -122,7 +122,6 @@ app.post("/authenticate", (req, res) => {
 
 // Update a specific user's value
 app.put("/changeBankValue", (req, res) => {
-
     console.log("Changing bank value");
     const { username, field, value } = req.body;
 
@@ -132,11 +131,19 @@ app.put("/changeBankValue", (req, res) => {
         return res.status(400).send("❌ Invalid field for update.");
     }
 
-    // Convert value to appropriate type for SQL (money should be a float)
-    const query = `UPDATE users SET ${field} = $1 WHERE username = $2`;
-    const values = [value, username];
+    // Ensure `money` is properly formatted as NUMERIC(10,2)
+    let newValue = value;
+    if (field === "money") {
+        newValue = parseFloat(value);
+        if (isNaN(newValue)) {
+            return res.status(400).send("❌ Invalid money value.");
+        }
+    }
 
-    // Execute the query
+    // Update query
+    const query = `UPDATE users SET ${field} = $1 WHERE username = $2`;
+    const values = [newValue, username];
+
     client.query(query, values)
         .then((result) => {
             if (result.rowCount > 0) {
@@ -150,6 +157,7 @@ app.put("/changeBankValue", (req, res) => {
             res.status(500).json({ success: false, message: "❌ Error updating user." });
         });
 });
+
 
 
 // Start the Express server
