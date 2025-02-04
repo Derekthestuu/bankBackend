@@ -84,7 +84,7 @@ app.get("/getUsers", (req, res) => {
     client.query("SELECT firstname, lastname, publicusername FROM users")
         .then((result) => {
             // Map the results to a single string per user
-            const users = result.rows.map(row => `${row.firstname} ${row.lastname} + "," + ${row.publicusername}`);
+            const users = result.rows.map(row => `${row.firstname} ${row.lastname} + , + ${row.publicusername}`);
             res.json(users);
         })
         .catch((err) => {
